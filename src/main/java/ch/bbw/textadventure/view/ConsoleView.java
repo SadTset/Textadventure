@@ -23,7 +23,9 @@ public final class ConsoleView {
     }
 
     public void show(String text) {
-        output.println(text);
+        if (text != null && !text.isBlank()) {
+            output.println(text);
+        }
     }
 
     public void showPrompt() {

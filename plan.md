@@ -2,7 +2,7 @@
 
 Follow this manual one step at a time. Run the check at the end of each step before moving on. The [HTML assignment](TextadventureAssignment_260923-a6547c5c.html) is the authoritative specification. Tests, command line story selection, and `quit` are suggested ways to implement and verify the required behavior; the assignment does not mandate those exact mechanisms.
 
-Progress: Steps 1–4 are complete. Update each checkbox only after its check passes.
+Progress: Steps 1–6 are complete. Update each checkbox only after its check passes.
 
 Open **`C:\Users\detek\nextcloud\school\BBW\320\Textadventure`** in your IDE. That main project folder already contains the Gradle files and `src/main/resources/tutorial.yaml`. Run the commands below in its terminal. On Windows PowerShell, Gradle is `.\gradlew.bat`; on macOS/Linux, use `./gradlew`.
 
@@ -44,7 +44,7 @@ First support actions containing `room`: set the current room ID and print the d
 
 **Check:** `go east` moves to `room-two`, and `go west` moves back to `room-one`.
 
-## [ ] 5. Add conditional actions and state
+## [x] 5. Add conditional actions and state
 
 For the chosen verb/object, examine actions **in YAML order**. An action without `ifState` matches automatically. One with `ifState` matches only if the state set contains that value. Execute **only the first matching action**. If none matches, do not change game state.
 
@@ -52,7 +52,7 @@ For the chosen action, add `addState` when present, print `message` when present
 
 **Check:** `take key`, `go east`, `open wardrobe`, `take coat`, `go east` reaches `secret`. A second `take key` reports that you already have it. Test both matching and nonmatching conditions.
 
-## [ ] 6. Add synonyms, help, and error messages
+## [x] 6. Add synonyms, help, and error messages
 
 Resolve global synonyms before searching room verbs: `walk east` should work like `go east`, and `examine table` like `look table`. For a known verb absent from the room, use its global `unknownVerb`. For a verb present without the requested object, use `unknownObject`, replacing `{}` with the entered object. For an unknown verb, use `globals.default.unknownVerb`. Support `help` and `help verbs` using the help messages in YAML. Do not print `null` or an empty error line.
 

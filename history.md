@@ -33,6 +33,9 @@ The assignment asks for a **generated summary of prompts used to develop the sol
 | “Do the next step.” | Started Step 4. Codex added the console command loop, `quit` and end-of-input handling, and movement through unconditional YAML room actions. It verified `go east`, `go west`, and `quit` in a scripted Gradle run. Conditional actions and full YAML responses remain for later steps. |
 | “Could you check off the steps we have done from now on?” | Requested progress tracking in the manual. Codex marked Steps 1–4 complete in `plan.md` and will update each remaining step after its check passes. |
 | “You can commit now; make sure to put in all the things we've done.” / “Write all the steps we've done in the commit message.” | Authorized a commit of the completed work and requested a detailed message listing Steps 1–4 and the related documentation changes. |
+| “Continue with the next step.” | Completed Step 5. Codex implemented first-matching conditional YAML actions, state additions, messages, and room changes. Tests and a scripted console playthrough reached the tutorial's secret room. The plan now marks Step 5 complete. |
+| “Go ahead.” | Continued with Step 6. Codex added global verb synonyms, YAML-defined `help` responses, and the correct global error messages for unknown verbs or objects. Tests and a scripted console run verified the responses; the plan now marks Step 6 complete. |
+| “Commit it.” | Authorized a focused commit of the completed Step 5 and Step 6 gameplay rules, tests, and documentation updates. |
 
 ## Continue this log
 
