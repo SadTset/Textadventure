@@ -1,5 +1,7 @@
 # Textadventure Assignment
 
+version 260923-a6547c5c, 2026-09-23
+
 Ziel ist es, mit Jackson YAML-Files zu verarbeiten und eine Game-Engine ala [Zork](https://www.pcjs.org/software/pcx86/game/infocom/zork1/) zu bauen. Die Projektnote ergibt sich zu 50% aus dem Produkt (Features) und zu 50% aus einem schriftlichen Kompetenznachweis / Kurzprüfung.
 
 ## YAML
