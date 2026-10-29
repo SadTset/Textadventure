@@ -37,6 +37,21 @@ The assignment asks for a **generated summary of prompts used to develop the sol
 | “Go ahead.” | Continued with Step 6. Codex added global verb synonyms, YAML-defined `help` responses, and the correct global error messages for unknown verbs or objects. Tests and a scripted console run verified the responses; the plan now marks Step 6 complete. |
 | “Commit it.” | Authorized a focused commit of the completed Step 5 and Step 6 gameplay rules, tests, and documentation updates. |
 
+## 1 October 2026 — Reviewing the project and adding story selection
+
+| Prompt or request | Purpose and outcome |
+| --- | --- |
+| “Who deserializes the YAMLs to Java records?” / “Who’s Jackson?” | Asked how YAML loading works. Codex identified Jackson's `YAMLMapper` in `StoryLoader` and explained that Jackson is the library that creates the Java records from YAML data. |
+| “Could you look into this project and see where we left off?” | Requested a project status review. Codex checked Git, the implementation, plan, history, and tests. Steps 1–6 were complete, tests passed, and Step 7 was identified as the next task. |
+| “Continue with the next step.” | Completed Step 7. Codex added a second forest story, optional story-file selection in `Main`, clear errors for missing or malformed files, and tests for default and external loading. Automated tests and console runs verified both stories, and the README and plan were updated. |
+
+## 29 October 2026 — Context review and commit authorization
+
+| Prompt or request | Purpose and outcome |
+| --- | --- |
+| “look through this folder for context and instructions” | Hermes reviewed the project instructions, assignment, plan, history, implementation, stories, and tests. A forced fresh test run passed. Step 7 was identified as complete but uncommitted, with Step 8 next. |
+| “aight do the commit” | Authorized a focused commit of Step 7: external story selection, the forest example, loading tests, and documentation. The Gradle build passed before committing. |
+
 ## Continue this log
 
 After each meaningful AI assisted work session, add the date, a short summary of the prompt(s), and what changed or was learned. Include learning, debugging, review, and implementation prompts. Keep the summary accurate; do not invent prompts or claim work that has not been completed.

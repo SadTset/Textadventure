@@ -2,7 +2,7 @@
 
 Follow this manual one step at a time. Run the check at the end of each step before moving on. The [HTML assignment](TextadventureAssignment_260923-a6547c5c.html) is the authoritative specification. Tests, command line story selection, and `quit` are suggested ways to implement and verify the required behavior; the assignment does not mandate those exact mechanisms.
 
-Progress: Steps 1–6 are complete. Update each checkbox only after its check passes.
+Progress: Steps 1–7 are complete. Update each checkbox only after its check passes.
 
 Open **`C:\Users\detek\nextcloud\school\BBW\320\Textadventure`** in your IDE. That main project folder already contains the Gradle files and `src/main/resources/tutorial.yaml`. Run the commands below in its terminal. On Windows PowerShell, Gradle is `.\gradlew.bat`; on macOS/Linux, use `./gradlew`.
 
@@ -58,7 +58,7 @@ Resolve global synonyms before searching room verbs: `walk east` should work lik
 
 **Check:** Try `walk east`, `examine table`, `go north`, `open key`, `dance`, `help`, and `help verbs`. Compare output to YAML and add tests for the distinct error cases.
 
-## [ ] 7. Prove the engine works with another story
+## [x] 7. Prove the engine works with another story
 
 Create a second small story with different room names and actions but the same YAML structure, then run it through the same application. One practical way to select a story is an optional YAML path argument, with the bundled tutorial as the default. This interface is an implementation choice; the requirement is that the engine can play any story in the specified format. Report malformed YAML or a missing file clearly.
 

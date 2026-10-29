@@ -13,3 +13,14 @@ Run `./gradlew run` (PowerShell: `.\gradlew.bat run`) to launch the current
 application entry point. Run `./gradlew test` (PowerShell: `.\gradlew.bat test`)
 to check story deserialization and validation.
 The Gradle Java toolchain is set to Java 25.
+
+The bundled tutorial is used when no story path is supplied. To run another
+story with the same YAML structure, pass its path as the single application
+argument. For example, the project includes a second playable forest story:
+
+```powershell
+.\gradlew.bat run --args="src/main/resources/forest.yaml"
+```
+
+A missing file, malformed YAML, or invalid story structure is reported with
+the path of the story that could not be loaded.

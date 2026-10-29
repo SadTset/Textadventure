@@ -1,0 +1,41 @@
+startRoom: clearing
+description: |
+  You wake in a quiet forest clearing. Find somewhere warm before nightfall.
+  Try commands such as 'look sign' and 'go north'. Enter 'quit' to leave.
+rooms:
+  clearing:
+    name: Forest clearing
+    description: A mossy sign points north toward a cabin.
+    verbs:
+      look:
+        sign:
+          - message: "The faded sign reads: Shelter ahead."
+      go:
+        north:
+          - room: cabin
+  cabin:
+    name: Abandoned cabin
+    description: The cabin is dusty, but its stone fireplace is still warm.
+    verbs:
+      go:
+        south:
+          - room: clearing
+      look:
+        fireplace:
+          - message: "A few glowing embers survive beneath the ash."
+globals:
+  default:
+    unknownVerb: That will not help you here.
+    unknownObject: ""
+  help:
+    synonyms: [ hint ]
+    unknownVerb: "Try looking at objects or moving in a direction."
+    unknownObject: "Available verbs: go, look, help."
+  go:
+    synonyms: [ walk, move ]
+    unknownVerb: There is nowhere to go from here.
+    unknownObject: "You cannot go {} from here."
+  look:
+    synonyms: [ examine ]
+    unknownVerb: There is nothing special to examine here.
+    unknownObject: "You cannot see {} here."
