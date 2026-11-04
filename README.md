@@ -24,3 +24,21 @@ argument. For example, the project includes a second playable forest story:
 
 A missing file, malformed YAML, or invalid story structure is reported with
 the path of the story that could not be loaded.
+
+## Extra rooms
+
+The tutorial now includes a clockmaker's workshop and a rooftop observatory.
+From the starting room, enter `go west`, `look bench`, `take lantern`, and
+`go up`. The staircase is blocked until you have the lantern. Try
+`look telescope` upstairs; return with `go down` and `go east`.
+The original key/wardrobe puzzle and route to the hidden room still work.
+
+## Command history
+
+Enter `history` in either story to display a numbered list of earlier commands
+in the current game session. It includes unsuccessful commands and preserves
+the entered spelling, with leading/trailing spaces removed. Blank input,
+`history` itself, and the exit command `quit` are not recorded. History starts
+empty each time the application launches and does not replay commands or
+change your room or puzzle states. This is an engine command; no YAML format
+changes are needed. The startup text explains how to use it.

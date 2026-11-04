@@ -24,10 +24,23 @@ public final class StoryLoader {
         if (story.startRoom() == null || !story.rooms().containsKey(story.startRoom())) {
             throw new IllegalArgumentException("Start room does not exist: " + story.startRoom());
         }
-        if (story.globals() == null) {
+        validateGlobals(story.globals());
+        story.rooms().forEach((roomId, room) -> validateRoom(story.rooms(), roomId, room));
+    }
+
+    private void validateGlobals(Map<String, GlobalVerb> globals) {
+        if (globals == null) {
             throw new IllegalArgumentException("Story must contain global verb settings.");
         }
-        story.rooms().forEach((roomId, room) -> validateRoom(story.rooms(), roomId, room));
+        var defaults = globals.get("default");
+        if (defaults == null || defaults.unknownVerb() == null || defaults.unknownVerb().isBlank()) {
+            throw new IllegalArgumentException("Story must contain a nonblank global default unknownVerb.");
+        }
+        globals.forEach((verb, settings) -> {
+            if (settings == null) {
+                throw new IllegalArgumentException("Missing global verb settings: " + verb);
+            }
+        });
     }
 
     private void validateRoom(Map<String, Room> rooms, String roomId, Room room) {

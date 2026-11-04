@@ -1,13 +1,12 @@
 package ch.bbw.textadventure;
 
+import module java.base;
+
 import ch.bbw.textadventure.controller.GameController;
 import ch.bbw.textadventure.model.GameState;
 import ch.bbw.textadventure.model.Story;
 import ch.bbw.textadventure.model.StoryLoader;
 import ch.bbw.textadventure.view.ConsoleView;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public final class Main {
     private Main() {
@@ -17,6 +16,8 @@ public final class Main {
         var story = loadStory(args);
         var state = new GameState(story.startRoom());
         var controller = new GameController(story, state);
+        // Player-facing console output is intentional, not diagnostic logging.
+        @SuppressWarnings("java:S106")
         var view = new ConsoleView(System.in, System.out);
         view.show(controller.introduction());
         view.show(controller.currentRoomText());
@@ -36,8 +37,8 @@ public final class Main {
             }
         }
 
-        var storyPath = Path.of(args[0]);
-        try (var input = Files.newInputStream(storyPath)) {
+        var storyPath = args[0];
+        try (var input = Files.newInputStream(Path.of(storyPath))) {
             return new StoryLoader().load(input);
         } catch (IOException | IllegalArgumentException error) {
             throw new IOException("Could not load story '" + storyPath + "': " + error.getMessage(), error);

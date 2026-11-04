@@ -1,8 +1,8 @@
 # How to complete the text adventure assignment
 
-Follow this manual one step at a time. Run the check at the end of each step before moving on. The [HTML assignment](TextadventureAssignment_260923-a6547c5c.html) is the authoritative specification. Tests, command line story selection, and `quit` are suggested ways to implement and verify the required behavior; the assignment does not mandate those exact mechanisms.
+Follow this manual one step at a time. Run the check at the end of each step before moving on. The [assignment](assignment.md) contains the specification copied from the original HTML. Tests, command line story selection, and `quit` are suggested ways to implement and verify the required behavior; the assignment does not mandate those exact mechanisms.
 
-Progress: Steps 1–7 are complete. Update each checkbox only after its check passes.
+Progress: Steps 1–8 are complete. Update each checkbox only after its check passes.
 
 Open **`C:\Users\detek\nextcloud\school\BBW\320\Textadventure`** in your IDE. That main project folder already contains the Gradle files and `src/main/resources/tutorial.yaml`. Run the commands below in its terminal. On Windows PowerShell, Gradle is `.\gradlew.bat`; on macOS/Linux, use `./gradlew`.
 
@@ -64,13 +64,18 @@ Create a second small story with different room names and actions but the same Y
 
 **Check:** The second story runs without editing Java source. The original tutorial still works.
 
-## [ ] 8. Add your own rooms and a visible feature
+## [x] 8. Add your own rooms and a visible feature
 
 Extend `tutorial.yaml` with original rooms, linked from an existing room. A new puzzle would make those rooms more interesting, but the assignment only explicitly requires your own rooms. Preserve the original route to `secret`. Do not change the YAML format without explicit agreement from the teacher.
 
 Choose one feature players can use. For example, a `history` command can show earlier commands, or `save`/`load` can persist the current room and states. Put its logic in the appropriate model/controller/view classes, explain it in the game and README, and test it. An application command can be added without changing the story YAML format.
 
 **Check:** A player can find the new rooms and use the feature; the original tutorial puzzle still passes.
+
+Implemented: a workshop west of the starting room, a lantern-gated observatory,
+and a session-only `history` command for every story. Automated tests, a clean
+build, and console playthroughs verified the new route, the original hidden-room
+puzzle, and history in both bundled stories.
 
 ## [ ] 9. Review code and prepare for the written check
 
@@ -79,6 +84,42 @@ Run `.\gradlew.bat clean build --warning-mode all`, play the game, and run Sonar
 Practise explaining records versus beans (constructors, accessors, immutability, value semantics); `try`/`catch`/`finally` and swallowed exceptions; basic YAML syntax; how YAML maps to Java objects; your MVC split; and a complete path from a YAML action to console output. Practise specific AI prompts for learning, examples, review, debugging, ideas, and reflection.
 
 **Check:** You can demonstrate and explain your own code without reading a generated answer.
+
+Review progress: the clean build and 16 tests pass, and both stories were played
+through the console. Jackson YAML was updated to 2.22.4 after checking Maven
+Central; JUnit remains current at 6.1.3. Main now demonstrates Java 25 module
+imports (JEP 511), command dispatch was split into smaller methods, and invalid
+global verb settings are rejected during loading rather than failing in play.
+Use `study-guide.md` to practise the competency topics.
+
+The independent review found no security issue or gameplay regression. Its
+Java-25-feature concern was resolved by the JEP 511 module import added during
+review. Its invalid-path suggestion was reproduced with a failing regression
+test and fixed by guarding path construction inside the loading try block.
+
+SonarQube for IDE is now installed. Its open project report showed 586 findings:
+578 in the supplied assignment HTML and 8 in project Java/tests/build scripts.
+The project findings were addressed with a shared constant, module-import
+ordering, single-call assertion lambdas, and a Gradle version catalog. The
+intentional player-facing System.out use has a narrowly scoped S106 suppression
+and explanation; replacing gameplay output with diagnostic logging is unsuitable.
+The optional assignment HTML was subsequently deleted at your request; its
+Markdown copy remains in `assignment.md`. Step 9 remains unchecked pending a fresh
+Sonar report for project code and your personal competency demonstration.
+
+Verification repeated on 4 November 2026: `clean build --warning-mode all`
+passed with 16 tests, zero failures and zero errors. Scripted console runs passed
+for the extended tutorial, forest story, and the unchanged original YAML extracted
+from `assignment.md`. Maven Central release metadata still reports Jackson YAML
+2.22.4 and JUnit Jupiter 6.1.3. Gradle detects Java 25 toolchains, and JEP 511
+confirms the module-import feature was finalized in Java 25. A new independent
+read-only review found no concrete security issue or logic regression.
+IntelliJ was launched, but its UI accessibility provider timed out, preventing
+inspection of a fresh Sonar report. The two remaining gates above are unchanged.
+
+The user subsequently reported that the Sonar report shows no issues. This is
+user-reported, not independently inspected by the agent. The remaining Step 9
+gate is personal competency practice and an unaided explanation of the code.
 
 ## [ ] 10. Finish the submission
 

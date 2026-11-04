@@ -18,7 +18,7 @@ class StoryLoaderTest {
             var story = loader.load(input);
 
             assertEquals("room-one", story.startRoom());
-            assertEquals(3, story.rooms().size());
+            assertEquals(5, story.rooms().size());
             assertTrue(story.description().startsWith("Welcome to the tutorial!"));
             assertEquals("Starting room", story.rooms().get("room-one").name());
             assertEquals("key", story.rooms().get("room-one").verbs().get("take").get("key").getFirst().ifState());
@@ -58,7 +58,7 @@ class StoryLoaderTest {
 
     @Test
     void rejectsAnUnknownTargetRoom() {
-        var error = assertThrows(IllegalArgumentException.class, () -> loader.load(yaml("""
+        var input = yaml("""
                 startRoom: forest
                 rooms:
                   forest:
@@ -72,12 +72,30 @@ class StoryLoaderTest {
                   default:
                     unknownVerb: No.
                     unknownObject: ""
-                """)));
+                """);
+        var error = assertThrows(IllegalArgumentException.class, () -> loader.load(input));
 
         assertEquals("Unknown target room: missing", error.getMessage());
     }
 
     private ByteArrayInputStream yaml(String content) {
         return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
+    }
+
+    @Test
+    void rejectsInvalidGlobalSettingsBeforeGameplay() throws IOException {
+        String tutorial;
+        try (var input = getClass().getResourceAsStream("/tutorial.yaml")) {
+            tutorial = new String(input.readAllBytes(), StandardCharsets.UTF_8);
+        }
+        for (var globals : new String[] {"{}", "{default: null}",
+                "{default: {unknownVerb: ' '}}",
+                "{default: {unknownVerb: No.}, go: null}"}) {
+            var invalid = tutorial.substring(0, tutorial.indexOf("\nglobals:"))
+                    + "\nglobals: " + globals;
+            var input = yaml(invalid);
+            var error = assertThrows(IllegalArgumentException.class, () -> loader.load(input));
+            assertTrue(error.getMessage().contains("global"));
+        }
     }
 }

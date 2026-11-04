@@ -10,6 +10,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 class MainTest {
+    @Test
+    void reportsAnInvalidStoryPathClearly() {
+        var error = assertThrows(IOException.class,
+                () -> Main.loadStory(new String[] {"invalid\u0000.yaml"}));
+
+        assertTrue(error.getMessage().startsWith("Could not load story '"));
+        assertTrue(error.getCause() instanceof java.nio.file.InvalidPathException);
+    }
+
     @TempDir
     java.nio.file.Path temporaryDirectory;
 

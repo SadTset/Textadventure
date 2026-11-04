@@ -11,6 +11,65 @@ import org.junit.jupiter.api.Test;
 
 class GameControllerTest {
     @Test
+    void exploresTheWorkshopAndObservatoryUsingALantern() throws IOException {
+        try (var input = getClass().getResourceAsStream("/tutorial.yaml")) {
+            var story = new StoryLoader().load(input);
+            var state = new GameState(story.startRoom());
+            var controller = new GameController(story, state);
+
+            assertTrue(controller.currentRoomText().contains("west"));
+            assertTrue(controller.handleCommand("go west").contains("Clockmaker's workshop"));
+            assertTrue(controller.handleCommand("go up").contains("too dark"));
+            assertEquals("workshop", state.currentRoomId());
+            assertTrue(controller.handleCommand("look bench").contains("lantern"));
+            assertTrue(controller.handleCommand("take lantern").contains("light the lantern"));
+            assertTrue(controller.handleCommand("take lantern").contains("already carrying"));
+            assertTrue(controller.handleCommand("go up").contains("Rooftop observatory"));
+            assertTrue(controller.handleCommand("look telescope").contains("silver constellation"));
+            controller.handleCommand("go down");
+            assertTrue(controller.handleCommand("go east").contains("Starting room"));
+            assertTrue(state.hasState("lantern"));
+        }
+    }
+
+    @Test
+    void showsEarlierCommandsInOrderWithoutRecordingHistoryItself() throws IOException {
+        try (var input = getClass().getResourceAsStream("/tutorial.yaml")) {
+            var story = new StoryLoader().load(input);
+            var state = new GameState(story.startRoom());
+            var controller = new GameController(story, state);
+
+            assertEquals("No commands yet.", controller.handleCommand("history"));
+            assertEquals("", controller.handleCommand("   "));
+            assertEquals("No commands yet.", controller.handleCommand("history"));
+            assertTrue(controller.introduction().contains("'history'"));
+            controller.handleCommand("  examine table  ");
+            controller.handleCommand("dance");
+            controller.handleCommand("walk east");
+
+            var expected = String.join(System.lineSeparator(),
+                    "Command history:", "1. examine table", "2. dance", "3. walk east");
+            assertEquals(expected, controller.handleCommand("history"));
+            assertEquals(expected, controller.handleCommand("  HISTORY  "));
+            assertEquals("room-two", state.currentRoomId());
+            assertTrue(state.states().isEmpty());
+        }
+    }
+
+    @Test
+    void supportsHistoryWithAnExternalStory() throws IOException {
+        try (var input = getClass().getResourceAsStream("/forest.yaml")) {
+            var story = new StoryLoader().load(input);
+            var controller = new GameController(story, new GameState(story.startRoom()));
+
+            assertEquals("No commands yet.", controller.handleCommand("history"));
+            controller.handleCommand("look sign");
+            assertEquals("Command history:" + System.lineSeparator() + "1. look sign",
+                    controller.handleCommand("history"));
+        }
+    }
+
+    @Test
     void describesTheStartingRoomWithoutConsoleInput() throws IOException {
         try (var input = getClass().getResourceAsStream("/tutorial.yaml")) {
             var story = new StoryLoader().load(input);

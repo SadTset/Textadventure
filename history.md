@@ -1,6 +1,6 @@
 # AI prompt history
 
-The assignment asks for a **generated summary of prompts used to develop the solution**. This file records the prompts from the current Codex conversation in chronological order. Prompts are shortened or paraphrased where needed, while keeping their intent. Update this file as work continues; it is a summary, not a full chat transcript.
+The assignment asks for a **generated summary of prompts used to develop the solution**. This file records the prompts from development conversations in chronological order. Prompts are shortened or paraphrased where needed, while keeping their intent. Update this file as work continues; it is a summary, not a full chat transcript.
 
 ## 24 September 2026 — Understanding and setting up the project
 
@@ -51,6 +51,36 @@ The assignment asks for a **generated summary of prompts used to develop the sol
 | --- | --- |
 | “look through this folder for context and instructions” | Hermes reviewed the project instructions, assignment, plan, history, implementation, stories, and tests. A forced fresh test run passed. Step 7 was identified as complete but uncommitted, with Step 8 next. |
 | “aight do the commit” | Authorized a focused commit of Step 7: external story selection, the forest example, loading tests, and documentation. The Gradle build passed before committing. |
+| “what's the next step” / “continue then” | Started and completed Step 8. Hermes added a clockmaker's workshop and lantern-gated rooftop observatory to the tutorial without changing the YAML format or original puzzle. A session-only `history` command lists earlier commands in either story. Tests were written and observed failing before the core additions, then the clean build and console playthroughs passed. README and plan were updated; no new commit was made. |
+
+| “do the next step” | Worked on Step 9: reviewed code and dependencies, updated Jackson YAML to 2.22.4, added the finalized Java 25 module-import feature, split command dispatch, and fixed invalid global settings and invalid path handling with regression tests. An independent read-only review found no security issue or gameplay regression; its Java 25 concern was addressed during the review. The final clean build passed all 16 tests, both stories were exercised, and study-guide.md was added. Step 9 remains unchecked pending IDE Sonar analysis and personal competency practice. No commit was made. |
+
+The user installed SonarQube for IDE and opened its report after automated IDE
+shortcuts were unreliable. Hermes inspected the visible report: 586 findings,
+including 578 in the supplied assignment HTML. It addressed the 8 project-code
+findings (constant reuse, import order, assertion lambdas, dependency versions,
+and a documented narrow suppression for intentional console output). The clean
+build passed; a fresh Sonar report is still required to verify the findings clear.
+
+The user clarified whether the supplied assignment HTML was required, then
+requested its deletion. Hermes removed the optional HTML reference and updated
+the plan to link to `assignment.md`; historical log entries remain unchanged.
+
+## 4 November 2026 — Project inspection and Step 9 verification
+
+| Prompt or request | Purpose and outcome |
+| --- | --- |
+| “look through this folder and report what you read” | Read project instructions, documentation, build configuration, source, tests, and both stories; reported implementation and remaining assignment gates without changing code. |
+| “could you do step 9” | Repeated the clean build: all 16 tests passed. Verified console playthroughs of the extended tutorial, forest story, and unchanged assignment YAML. Checked dependency release metadata, Java toolchains, and JEP 511. An independent read-only review found no concrete security issue or logic regression. IntelliJ accessibility timed out, so a fresh Sonar report remains unverified; the user's unaided competency demonstration also remains outstanding. Updated the plan and this log; no application code changes or commits were made. |
+
+The user then reported “report says no issues”. Recorded the Sonar result as
+user-reported in the plan; Step 9 remains open only for the personal competency
+demonstration.
+
+The user asked why Jackson questions were being asked; explained that Jackson
+maps YAML to Java objects through StoryLoader and that the questions related to
+written-check preparation. The user then authorized committing the accumulated
+work. The clean build passed again before committing.
 
 ## Continue this log
 

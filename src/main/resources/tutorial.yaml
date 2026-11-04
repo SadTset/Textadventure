@@ -14,10 +14,13 @@ rooms: # Map<String, Room>
       You are in an unadorned, rectangular room without windows and a table next to the wall.
       A simple light bulb is hanging from the ceiling, the only source of light, casting harsh shadows.
       There is a passage to the east, apparently to another room much like this.
+      A narrow doorway to the west leads into a clockmaker's workshop.
     verbs: # for example as: Map<String, Map<String, List<Action>>>
       go: # "go" is the verb
         east: # "east" is the object, what follows, is a list (with 1 item) of actions:
           - room: room-two # "room" indicates we will switch rooms, this must be a key in "rooms"
+        west:
+          - room: workshop
       look:
         table:
           # "message" will be printed, but has no effect otherwise (but might yield hints)
@@ -76,6 +79,44 @@ rooms: # Map<String, Room>
       go:
         west:
           - room: room-two
+  workshop:
+    name: Clockmaker's workshop
+    description: |
+      Silent clocks cover the walls. A brass lantern rests on a workbench.
+      A dark staircase climbs up to an observatory. The starting room is east.
+    verbs:
+      go:
+        east:
+          - room: room-one
+        up:
+          - ifState: lantern
+            room: observatory
+          - message: "The staircase is too dark. You need a light before climbing."
+      look:
+        bench:
+          - message: "Among scattered gears sits a brass lantern, ready to be lit."
+        lantern:
+          - ifState: lantern
+            message: "The lantern casts a warm circle of light around you."
+          - message: "A brass lantern with a full oil reservoir and a built-in striker."
+      take:
+        lantern:
+          - ifState: lantern
+            message: "You are already carrying the lantern."
+          - addState: lantern
+            message: "You light the lantern and lift it from the workbench."
+  observatory:
+    name: Rooftop observatory
+    description: |
+      Moonlight shines through a cracked glass dome onto an old telescope.
+      The staircase leads down to the workshop.
+    verbs:
+      go:
+        down:
+          - room: workshop
+      look:
+        telescope:
+          - message: "Through the telescope you discover a silver constellation shaped like a key."
 # global verbs: here we define defaults/synonyms and error-messages
 globals:
   default:

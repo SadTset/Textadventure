@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public final class GameController {
+    private static final String DEFAULT_VERB = "default";
     private final Story story;
     private final GameState state;
 
@@ -20,7 +21,8 @@ public final class GameController {
     }
 
     public String introduction() {
-        return story.description();
+        return story.description() + System.lineSeparator()
+                + "Type 'history' to see earlier commands, or 'quit' to leave.";
     }
 
     public String currentRoomText() {
@@ -29,9 +31,20 @@ public final class GameController {
     }
 
     public String handleCommand(String input) {
+        if (input.isBlank()) {
+            return "";
+        }
+        if (input.trim().equalsIgnoreCase("history")) {
+            return historyText();
+        }
+        state.recordCommand(input.trim());
         var parts = input.trim().split("\\s+", 2);
         var verb = canonicalVerb(parts[0].toLowerCase(Locale.ROOT));
         var object = parts.length > 1 ? parts[1].toLowerCase(Locale.ROOT) : "";
+        return handleStoryCommand(verb, object);
+    }
+
+    private String handleStoryCommand(String verb, String object) {
         var room = story.rooms().get(state.currentRoomId());
         if ("help".equals(verb) && !room.verbs().containsKey(verb)) {
             return object.isEmpty() ? unknownVerb(verb) : unknownObject(verb, object);
@@ -50,8 +63,20 @@ public final class GameController {
         return action == null ? unknownObject(verb, object) : execute(action);
     }
 
+    private String historyText() {
+        var commands = state.commandHistory();
+        if (commands.isEmpty()) {
+            return "No commands yet.";
+        }
+        var text = new StringBuilder("Command history:");
+        for (var index = 0; index < commands.size(); index++) {
+            text.append(System.lineSeparator()).append(index + 1).append(". ").append(commands.get(index));
+        }
+        return text.toString();
+    }
+
     private String canonicalVerb(String inputVerb) {
-        if (story.globals().containsKey(inputVerb) && !"default".equals(inputVerb)) {
+        if (story.globals().containsKey(inputVerb) && !DEFAULT_VERB.equals(inputVerb)) {
             return inputVerb;
         }
         for (var entry : story.globals().entrySet()) {
@@ -66,14 +91,14 @@ public final class GameController {
     private String unknownVerb(String verb) {
         var settings = story.globals().get(verb);
         var message = settings == null ? null : settings.unknownVerb();
-        return message == null ? story.globals().get("default").unknownVerb() : message;
+        return message == null ? story.globals().get(DEFAULT_VERB).unknownVerb() : message;
     }
 
     private String unknownObject(String verb, String object) {
         var settings = story.globals().get(verb);
         var message = settings == null ? null : settings.unknownObject();
         if (message == null) {
-            message = story.globals().get("default").unknownObject();
+            message = story.globals().get(DEFAULT_VERB).unknownObject();
         }
         return message == null ? "" : message.replace("{}", object);
     }
