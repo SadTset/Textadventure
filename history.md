@@ -82,6 +82,16 @@ maps YAML to Java objects through StoryLoader and that the questions related to
 written-check preparation. The user then authorized committing the accumulated
 work. The clean build passed again before committing.
 
+## Story expansion and self-evaluation preparation
+
+| Prompt or request | Purpose and outcome |
+| --- | --- |
+| “can you look through this repo to get context and instructions for yourself?” | Read the instructions, assignment, documentation, source, stories and tests. Reran all 16 existing tests successfully; no code changes were needed. |
+| “could you write the selbsevaluation?” / “fill out the already existing md file” | Created a labelled draft on the Desktop, then filled the missing paragraphs in the existing Desktop template while keeping the user's original paragraph. Explained that the final reflection must be personally revised. |
+| “check the selbsevalutation md file if i fullfilled all the requirements?” | Compared the user's revised Desktop text with the assignment. Counted 492 words in the four reflection paragraphs; identified the missing personal-pride statement, remaining template instructions, and final project-file placement. |
+| Questions about the wardrobe, lantern, telescope and Narnia ending | Explained the key requirement, directional commands and short tutorial ending. Verified the lantern route with its focused test. |
+| “could you make more? like right now it's very underwhelming” | Expanded the tutorial into The Clockmaker's Winter, continuing beyond Narnia with six locations, a telescope-dependent gate, an archive chest and a bell-tower restoration puzzle. Added regression playthroughs, preserving the original puzzle and YAML format. Updated the README with player guidance and a spoiler walkthrough. |
+
 ## Continue this log
 
 After each meaningful AI assisted work session, add the date, a short summary of the prompt(s), and what changed or was learned. Include learning, debugging, review, and implementation prompts. Keep the summary accurate; do not invent prompts or claim work that has not been completed.

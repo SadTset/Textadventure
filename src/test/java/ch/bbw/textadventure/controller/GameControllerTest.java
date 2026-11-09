@@ -11,6 +11,98 @@ import org.junit.jupiter.api.Test;
 
 class GameControllerTest {
     @Test
+    void restoresTimeOnlyAfterFindingTheGearAndCrank() throws IOException {
+        try (var input = getClass().getResourceAsStream("/tutorial.yaml")) {
+            var story = new StoryLoader().load(input);
+            var state = new GameState(story.startRoom());
+            var controller = new GameController(story, state);
+            for (var command : new String[] {"go west", "take lantern", "go up", "look telescope",
+                    "go down", "go east"}) {
+                controller.handleCommand(command);
+            }
+            enterNarnia(controller);
+            for (var command : new String[] {"go north", "go east", "open gate", "go north", "go up"}) {
+                controller.handleCommand(command);
+            }
+            assertTrue(controller.handleCommand("ring bell").contains("gear"));
+            controller.handleCommand("use crank");
+            controller.handleCommand("go down");
+            assertTrue(controller.handleCommand("pull chain").contains("jammed"));
+            assertFalse(state.hasState("crank"));
+            controller.handleCommand("go up");
+            controller.handleCommand("go east");
+            assertFalse(state.hasState("spring"));
+            assertEquals("bell-tower", state.currentRoomId());
+
+            for (var command : new String[] {"go down", "go south", "go west", "go west"}) {
+                controller.handleCommand(command);
+            }
+            assertTrue(controller.handleCommand("take gear").contains("sealed chest"));
+            assertTrue(controller.handleCommand("open chest").contains("journal"));
+            controller.handleCommand("look journal");
+            controller.handleCommand("open chest");
+            controller.handleCommand("take gear");
+            assertTrue(controller.handleCommand("take gear").contains("already"));
+            for (var command : new String[] {"go east", "go east", "go north", "go up", "use gear"}) {
+                controller.handleCommand(command);
+            }
+            assertTrue(controller.handleCommand("ring bell").contains("crank"));
+            assertFalse(state.hasState("spring"));
+            controller.handleCommand("go down");
+            controller.handleCommand("pull chain");
+            assertTrue(controller.handleCommand("pull chain").contains("already"));
+            controller.handleCommand("go up");
+            controller.handleCommand("use crank");
+            assertTrue(controller.handleCommand("ring bell").contains("Time is moving again"));
+            assertTrue(controller.handleCommand("ring bell").contains("rings freely"));
+            assertTrue(controller.handleCommand("go east").contains("THE END"));
+            assertEquals("sunrise", state.currentRoomId());
+        }
+    }
+
+    @Test
+    void opensTheWinterGateUsingTheObservatoryClue() throws IOException {
+        try (var input = getClass().getResourceAsStream("/tutorial.yaml")) {
+            var story = new StoryLoader().load(input);
+            var state = new GameState(story.startRoom());
+            var controller = new GameController(story, state);
+
+            enterNarnia(controller);
+            assertTrue(controller.currentRoomText().contains("north"));
+            assertTrue(controller.handleCommand("go north").contains("lantern"));
+            assertEquals("secret", state.currentRoomId());
+            controller.handleCommand("go west");
+            controller.handleCommand("go west");
+            controller.handleCommand("go west");
+            controller.handleCommand("take lantern");
+            controller.handleCommand("go east");
+            controller.handleCommand("go east");
+            controller.handleCommand("go east");
+            assertTrue(controller.handleCommand("go north").contains("Frozen wood"));
+            controller.handleCommand("go east");
+            assertTrue(controller.handleCommand("open gate").contains("telescope"));
+            controller.handleCommand("go north");
+            assertEquals("iron-gate", state.currentRoomId());
+
+            for (var command : new String[] {"go west", "go south", "go west", "go west",
+                    "go west", "go up", "look telescope", "go down", "go east", "go east",
+                    "go east", "go north", "go east"}) {
+                controller.handleCommand(command);
+            }
+            assertTrue(state.hasState("starMap"));
+            assertTrue(controller.handleCommand("open gate").contains("gate swings open"));
+            assertTrue(controller.handleCommand("go north").contains("Silent courtyard"));
+            assertEquals("courtyard", state.currentRoomId());
+        }
+    }
+
+    private void enterNarnia(GameController controller) {
+        for (var command : new String[] {"take key", "go east", "open wardrobe", "take coat", "go east"}) {
+            controller.handleCommand(command);
+        }
+    }
+
+    @Test
     void exploresTheWorkshopAndObservatoryUsingALantern() throws IOException {
         try (var input = getClass().getResourceAsStream("/tutorial.yaml")) {
             var story = new StoryLoader().load(input);

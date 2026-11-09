@@ -77,6 +77,15 @@ and a session-only `history` command for every story. Automated tests, a clean
 build, and console playthroughs verified the new route, the original hidden-room
 puzzle, and history in both bundled stories.
 
+Further story expansion: The Clockmaker's Winter continues north from Narnia
+through six additional locations. The telescope now supplies a gate clue, and
+an archive chest, sun gear, fountain counterweight and winding crank lead to
+restoring the bell tower and reaching a sunrise ending. The YAML format and
+original tutorial route remain intact. A clean build passed all 18 tests;
+scripted console runs reached the new ending and verified the forest story.
+The README includes a spoiler walkthrough. Rerun IDE Sonar analysis for the
+new tests before submission; the previous clean report predates this expansion.
+
 ## [ ] 9. Review code and prepare for the written check
 
 Run `.\gradlew.bat clean build --warning-mode all`, play the game, and run SonarLint in the IDE. Fix warnings, especially long methods. Keep code in English, use `var` wherever possible, and deliberately use and understand Java 25's newer language features. Prefer Jackson as the only runtime library and check that dependencies are current.

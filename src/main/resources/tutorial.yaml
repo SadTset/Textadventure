@@ -74,11 +74,21 @@ rooms: # Map<String, Room>
             addState: coat
   secret:
     name: A hidden room
-    description: You found the hidden passage to Narnia. The tutorial ends here. Congratulations!
+    description: |
+      You found the hidden passage to Narnia. Congratulations! The original tutorial is complete.
+      But beyond the wardrobe, snow falls beneath a motionless sky. A distant bell has stopped mid-chime.
+      A trail leads north into a frozen wood; the wardrobe back to the other room is west.
     verbs:
       go:
         west:
           - room: room-two
+        north:
+          - ifState: lantern
+            room: frozen-wood
+          - message: "The trees swallow the light. Bring the lantern from the workshop before following the trail north."
+      look:
+        snow:
+          - message: "Every snowflake hangs still. Something has stopped time beyond the wood."
   workshop:
     name: Clockmaker's workshop
     description: |
@@ -116,7 +126,162 @@ rooms: # Map<String, Room>
           - room: workshop
       look:
         telescope:
-          - message: "Through the telescope you discover a silver constellation shaped like a key."
+          - addState: starMap
+            message: "Through the telescope you discover a silver constellation shaped like a key. You sketch its pattern: crown, fox, flame. A plate on the telescope reads: The winter gate remembers the stars. Beyond it, return the sun to the bell tower."
+  frozen-wood:
+    name: Frozen wood
+    description: |
+      Snow-laden trees lean over a stone milestone. A fox made of frost watches without blinking.
+      The wardrobe clearing is south. An iron gate stands east; a ruined archive lies west.
+    verbs:
+      go:
+        south:
+          - room: secret
+        east:
+          - room: iron-gate
+        west:
+          - room: archive
+      look:
+        milestone:
+          - message: "The inscription reads: When the bell fell silent, the keeper hid its sun. Seek his journal in the archive."
+        fox:
+          - message: "Frozen eyes reflect three stars. It seems to be pointing toward the gate."
+  iron-gate:
+    name: Winter gate
+    description: |
+      An iron gate blocks the road north. Its lock is a dial covered with stars.
+      An inscription says: The watcher above the workshop knows the order.
+      Return west to the frozen wood. To try the star dial, enter 'open gate'.
+    verbs:
+      go:
+        west:
+          - room: frozen-wood
+        north:
+          - ifState: winterGateOpen
+            room: courtyard
+          - message: "The gate is still locked. Examine the dial and try 'open gate'."
+      look:
+        dial:
+          - ifState: starMap
+            message: "Your sketch shows the order: crown, fox, flame. You can now open the gate."
+          - message: "Too many stars to guess. Perhaps the telescope above the workshop reveals the pattern."
+      open:
+        gate:
+          - ifState: winterGateOpen
+            message: "The gate is already open."
+          - ifState: starMap
+            addState: winterGateOpen
+            message: "You set crown, fox, flame. The gate swings open. The road north is clear."
+          - message: "The dial will not move without the right pattern. Try the telescope above the workshop."
+  archive:
+    name: Ruined archive
+    description: |
+      Frost curls across empty shelves. A keeper's journal lies open on a reading desk.
+      A sealed brass chest rests beside it. The frozen wood is east.
+    verbs:
+      go:
+        east:
+          - room: frozen-wood
+      look:
+        journal:
+          - addState: keeperSecret
+            message: "The keeper wrote: My chest opens to warmth, not iron. Hold a lit lantern beside the seal. Its sun gear belongs in the tower mechanism. The courtyard fountain hides the winding crank; pull its chain."
+        chest:
+          - message: "The seal is a small brass sun. There is no keyhole. Read the journal for the keeper's instructions."
+      open:
+        chest:
+          - ifState: chestOpen
+            message: "The chest stands open. Take the sun gear with 'take gear'."
+          - ifState: keeperSecret
+            addState: chestOpen
+            message: "Following the journal, you hold the lantern against the sun seal. The chest opens, revealing a golden gear. Take it with 'take gear'."
+          - message: "There is no keyhole. The journal on the desk might explain the seal."
+      take:
+        gear:
+          - ifState: sunGear
+            message: "You already have the sun gear."
+          - ifState: chestOpen
+            addState: sunGear
+            message: "You wrap the sun gear in your coat. It is warm despite the frozen air."
+          - message: "The sun gear is inside the sealed chest. Read the journal, then open the chest."
+  courtyard:
+    name: Silent courtyard
+    description: |
+      A dry fountain stands below a bell tower. A chain disappears into the fountain's well.
+      Stone steps lead up to the tower mechanism. The winter gate is south.
+      You can 'look fountain' or 'pull chain'.
+    verbs:
+      go:
+        south:
+          - room: iron-gate
+        up:
+          - room: bell-tower
+      look:
+        fountain:
+          - message: "A winding crank hangs from a chain connected to the tower's counterweight. Fit the missing tower gear to release the chain, then 'pull chain'."
+      pull:
+        chain:
+          - ifState: crank
+            message: "You already recovered the winding crank."
+          - ifState: gearInstalled
+            addState: crank
+            message: "You pull the chain hand over hand and recover the winding crank. Carry it up to the tower."
+          - message: "The chain is jammed by the tower's frozen counterweight. Fit the sun gear in the tower first."
+  bell-tower:
+    name: Bell tower mechanism
+    description: |
+      A pendulum hangs motionless above a machine with a sun-shaped gap and an empty crank socket.
+      A balcony overlooks a valley trapped in winter. The courtyard is down.
+      Try 'look mechanism', 'use gear', 'use crank', and finally 'ring bell'.
+    verbs:
+      go:
+        down:
+          - room: courtyard
+        east:
+          - ifState: spring
+            room: sunrise
+          - message: "A wall of frozen mist blocks the eastern bridge. Restore the bell before crossing."
+      look:
+        mechanism:
+          - ifState: mechanismReady
+            message: "The gear is fitted and the spring is wound. Ring the bell to restart time."
+          - ifState: gearInstalled
+            message: "The sun gear fits perfectly. Use the crank from the courtyard fountain to wind the spring."
+          - message: "The sun gear is missing. The keeper's journal in the archive explains where it is hidden."
+      use:
+        gear:
+          - ifState: gearInstalled
+            message: "The sun gear is already fitted."
+          - ifState: sunGear
+            addState: gearInstalled
+            message: "You fit the sun gear. The teeth engage and release the fountain's counterweight below. Pull its chain to recover the crank, then bring it here and 'use crank'."
+          - message: "You need the sun gear from the archive chest. Read the keeper's journal there."
+        crank:
+          - ifState: crank
+            addState: mechanismReady
+            message: "You attach the crank and wind the spring. The fitted sun gear begins to glow. Now 'ring bell'."
+          - message: "You need the winding crank. Look in the courtyard fountain below."
+      ring:
+        bell:
+          - ifState: spring
+            message: "The bell rings freely. The eastern bridge leads to the sunrise."
+          - ifState: mechanismReady
+            addState: spring
+            message: "The bell sounds across the valley. Snow begins to fall, then melts into rain. Time is moving again. A bridge appears east toward the sunrise."
+          - ifState: gearInstalled
+            message: "The gear is fitted, but the spring is slack. Recover the crank from the courtyard fountain and 'use crank'."
+          - message: "The bell is silent. Find the sun gear in the archive and fit it with 'use gear'."
+  sunrise:
+    name: Valley of the first sunrise
+    description: |
+      You step onto the bridge as the sun rises over a thawing valley. The fox below shakes frost from its fur.
+      The keeper's bell answers a hundred distant bells. You returned the sun and broke the long winter.
+      THE END - The Clockmaker's Winter. Congratulations!
+      You may go west to explore again, view 'history', or 'quit'.
+    verbs:
+      go:
+        west:
+          - room: bell-tower
 # global verbs: here we define defaults/synonyms and error-messages
 globals:
   default:

@@ -18,7 +18,7 @@ class StoryLoaderTest {
             var story = loader.load(input);
 
             assertEquals("room-one", story.startRoom());
-            assertEquals(5, story.rooms().size());
+            assertEquals(11, story.rooms().size());
             assertTrue(story.description().startsWith("Welcome to the tutorial!"));
             assertEquals("Starting room", story.rooms().get("room-one").name());
             assertEquals("key", story.rooms().get("room-one").verbs().get("take").get("key").getFirst().ifState());
