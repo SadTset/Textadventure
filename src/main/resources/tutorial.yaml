@@ -22,12 +22,18 @@ rooms: # Map<String, Room>
         west:
           - room: workshop
       look:
+        "":
+          - message: "A simple light bulb hangs above a wooden table. Scratches mark the tabletop. A passage leads east to another room; a narrow doorway west opens onto a workshop."
         table:
+          - ifState: key
+            message: "The tabletop is empty. You already have its small key in your pocket."
           # "message" will be printed, but has no effect otherwise (but might yield hints)
           - message: "This is a simple, wooden table. It has a small key lying on top."
         light:
           - message: "A simple light bulb. It reads: 60W."
         key:
+          - ifState: key
+            message: "The small key is safely in your pocket."
           - message: "A small key."
       take:
         table:
@@ -55,20 +61,36 @@ rooms: # Map<String, Room>
           - ifState: coat
             room: secret
       look:
+        "":
+          - ifState: coat
+            message: "You are wearing the black coat. The wardrobe is open and empty, revealing the passage east. Go west to the starting room or east through the wardrobe."
+          - ifState: wardrobeOpen
+            message: "The wardrobe door is open. A black coat hangs inside, stirring in a draught from somewhere behind it. The starting room is west."
+          - message: "A white wardrobe stands against the east wall. Its door is closed, with a small brass keyhole beneath the handle. The starting room is west."
         wardrobe:
+          - ifState: coat
+            message: "The wardrobe is open and empty. You are wearing its coat. Cold air drifts through the secret passage to the east."
           - ifState: wardrobeOpen
             message: "A large, white wardrobe with an open door. There is a black coat inside."
           - message: "A large, white wardrobe. It looks like an IKEA model. It is closed."
         coat:
-          - message: "A large, black coat. It might suit you."
+          - ifState: coat
+            message: "You are wearing the black coat. It keeps you warm."
+          - ifState: wardrobeOpen
+            message: "A heavy black coat hangs in the open wardrobe. Its lining rustles in a cold draught."
+          - message: "The closed wardrobe hides whatever is inside."
       open:
         wardrobe:
+          - ifState: wardrobeOpen
+            message: "The wardrobe is already open."
           - ifState: key
             message: "The wardrobe is now unlocked."
             addState: wardrobeOpen
-          - message: "You try to pick up the wardrobe... Well... no."
+          - message: "The handle turns, but the wardrobe is locked. Its brass keyhole is small and ordinary."
       take:
         coat:
+          - ifState: coat
+            message: "You are already wearing the coat. The secret passage is east."
           - ifState: wardrobeOpen
             message: "It suits you well. But more importantly: you detect a secret passage through the wardrobe towards the east."
             addState: coat
@@ -85,9 +107,15 @@ rooms: # Map<String, Room>
         north:
           - ifState: lantern
             room: frozen-wood
-          - message: "The trees swallow the light. Bring the lantern from the workshop before following the trail north."
+          - message: "The trees swallow the light. Beyond the first few steps, you cannot see the trail."
       look:
+        "":
+          - ifState: spring
+            message: "Warm air enters through the wardrobe as the valley begins to thaw. The bell rings in the distance. Go north to the wood or west to the wardrobe room."
+          - message: "Beyond the wardrobe, snow hangs in a motionless sky. A bell's unfinished note trembles in the air. A dark trail runs north into the wood; the wardrobe is west."
         snow:
+          - ifState: spring
+            message: "The snow is melting. The bell has restarted time."
           - message: "Every snowflake hangs still. Something has stopped time beyond the wood."
   workshop:
     name: Clockmaker's workshop
@@ -103,7 +131,13 @@ rooms: # Map<String, Room>
             room: observatory
           - message: "The staircase is too dark. You need a light before climbing."
       look:
+        "":
+          - ifState: lantern
+            message: "Silent clocks line the workshop. You are carrying the lit lantern; its place on the bench is empty. Go up to the observatory or east to the starting room."
+          - message: "Silent clocks line the workshop. A brass lantern rests on the bench beneath a dark staircase to the observatory. The starting room is east."
         bench:
+          - ifState: lantern
+            message: "The lantern's place on the bench is empty. You are carrying it."
           - message: "Among scattered gears sits a brass lantern, ready to be lit."
         lantern:
           - ifState: lantern
@@ -126,8 +160,10 @@ rooms: # Map<String, Room>
           - room: workshop
       look:
         telescope:
+          - ifState: starMap
+            message: "You check your sketch against the silver constellation: crown, fox, flame. The pattern is already recorded."
           - addState: starMap
-            message: "Through the telescope you discover a silver constellation shaped like a key. You sketch its pattern: crown, fox, flame. A plate on the telescope reads: The winter gate remembers the stars. Beyond it, return the sun to the bell tower."
+            message: "Through the telescope you discover a silver constellation shaped like a key. You sketch its pattern: crown, fox, flame. Scratched into the brass rim are the words: What winter locks, the watcher remembers."
   frozen-wood:
     name: Frozen wood
     description: |
@@ -142,16 +178,22 @@ rooms: # Map<String, Room>
         west:
           - room: archive
       look:
+        "":
+          - ifState: spring
+            message: "The wood begins to thaw. Snow slips from the branches and the fox moves again. Go south to the wardrobe, east to the open winter gate, or west to the archive."
+          - message: "Snow-laden trees surround a weathered milestone and a frozen fox. The wardrobe clearing is south, an iron gate east, and a ruined archive west."
         milestone:
-          - message: "The inscription reads: When the bell fell silent, the keeper hid its sun. Seek his journal in the archive."
+          - message: "The inscription reads: When the bell fell silent, the keeper hid its sun. Beneath it, a carved arrow points west toward the archive."
         fox:
+          - ifState: spring
+            message: "The fox is alive and shakes melting frost from its fur."
           - message: "Frozen eyes reflect three stars. It seems to be pointing toward the gate."
   iron-gate:
     name: Winter gate
     description: |
       An iron gate blocks the road north. Its lock is a dial covered with stars.
       An inscription says: The watcher above the workshop knows the order.
-      Return west to the frozen wood. To try the star dial, enter 'open gate'.
+      The frozen wood lies west.
     verbs:
       go:
         west:
@@ -159,12 +201,22 @@ rooms: # Map<String, Room>
         north:
           - ifState: winterGateOpen
             room: courtyard
-          - message: "The gate is still locked. Examine the dial and try 'open gate'."
+          - message: "The gate is still locked. Three star-shaped recesses surround its dial."
       look:
-        dial:
+        "":
+          - ifState: spring
+            message: "The iron gate stands open as its hinges thaw in the sunlight. Go north to the courtyard or west to the wood."
+          - ifState: winterGateOpen
+            message: "The iron gate stands open. Its star dial is unlocked; the road north to the courtyard is clear. Go north or return west to the wood."
           - ifState: starMap
-            message: "Your sketch shows the order: crown, fox, flame. You can now open the gate."
-          - message: "Too many stars to guess. Perhaps the telescope above the workshop reveals the pattern."
+            message: "The winter gate is closed. Its dial bears the same symbols as your sketch. Beyond the bars a courtyard lies north; the wood is west."
+          - message: "An iron gate blocks the road north. A star-covered dial sits beneath an inscription: The watcher above the workshop knows the order. The wood is west."
+        dial:
+          - ifState: winterGateOpen
+            message: "The dial is unlocked and the gate is already open. Go north to the courtyard."
+          - ifState: starMap
+            message: "Crown, fox, flame: the symbols match your sketch. The dial gives slightly beneath your fingers."
+          - message: "Tiny stars surround three movable rings. The inscription calls them the watcher's memory."
       open:
         gate:
           - ifState: winterGateOpen
@@ -172,7 +224,7 @@ rooms: # Map<String, Room>
           - ifState: starMap
             addState: winterGateOpen
             message: "You set crown, fox, flame. The gate swings open. The road north is clear."
-          - message: "The dial will not move without the right pattern. Try the telescope above the workshop."
+          - message: "The rings turn, then snap back. You have not found their order. The inscription mentions a watcher above the workshop."
   archive:
     name: Ruined archive
     description: |
@@ -183,33 +235,55 @@ rooms: # Map<String, Room>
         east:
           - room: frozen-wood
       look:
+        "":
+          - ifState: spring
+            message: "The archive windows begin to thaw. The journal lies beside the open, empty chest; its sun gear is installed in the tower. Go east to the wood."
+          - ifState: sunGear
+            message: "The brass chest is empty. You have removed its sun gear. The keeper's journal remains on the desk. The wood lies east."
+          - ifState: chestOpen
+            message: "The brass chest is open. A golden gear rests in a velvet-lined hollow. The wood lies east."
+          - message: "A brass chest stands beside the keeper's journal. A sun-shaped seal holds its lid shut. The wood lies east."
         journal:
+          - ifState: spring
+            message: "The keeper's instructions have been fulfilled. The sun gear and crank are installed, and the bell is ringing again."
+          - ifState: gearInstalled
+            message: "The journal's drawing matches the gear you installed. A faded margin note reads: A bell needs breath as well as teeth."
+          - ifState: sunGear
+            message: "The loose gear matches the journal's drawing of the bell tower movement. There are oily fingerprints beside a sketch of a winding handle."
           - addState: keeperSecret
-            message: "The keeper wrote: My chest opens to warmth, not iron. Hold a lit lantern beside the seal. Its sun gear belongs in the tower mechanism. The courtyard fountain hides the winding crank; pull its chain."
+            message: "The keeper wrote: My sun sleeps where winter cannot touch it. The seal remembers warmth. Beneath the words is a drawing of the bell tower movement: a toothed sun, a coiled spring, and a square winding socket. The last page is torn away."
         chest:
-          - message: "The seal is a small brass sun. There is no keyhole. Read the journal for the keeper's instructions."
+          - ifState: sunGear
+            message: "The chest is open and empty. You have already removed its sun gear."
+          - ifState: chestOpen
+            message: "A golden sun gear rests inside the open chest."
+          - message: "The sun seal has no keyhole. Its brass petals feel warmer where your lantern passes close. Faded handwriting resembles the keeper's journal."
       open:
         chest:
+          - ifState: sunGear
+            message: "The chest is already open and empty. You have removed its gear."
           - ifState: chestOpen
-            message: "The chest stands open. Take the sun gear with 'take gear'."
+            message: "The chest stands open, with a golden gear inside."
           - ifState: keeperSecret
             addState: chestOpen
-            message: "Following the journal, you hold the lantern against the sun seal. The chest opens, revealing a golden gear. Take it with 'take gear'."
-          - message: "There is no keyhole. The journal on the desk might explain the seal."
+            message: "Following the journal, you hold the lantern against the sun seal. The chest opens, revealing a golden gear."
+          - message: "The seal resists you. There is no keyhole, only faded handwriting around a brass sun."
       take:
         gear:
+          - ifState: gearInstalled
+            message: "The sun gear is already installed in the bell tower, not in this chest."
           - ifState: sunGear
             message: "You already have the sun gear."
           - ifState: chestOpen
             addState: sunGear
             message: "You wrap the sun gear in your coat. It is warm despite the frozen air."
-          - message: "The sun gear is inside the sealed chest. Read the journal, then open the chest."
+          - message: "The sealed chest keeps its contents out of reach."
   courtyard:
     name: Silent courtyard
     description: |
       A dry fountain stands below a bell tower. A chain disappears into the fountain's well.
       Stone steps lead up to the tower mechanism. The winter gate is south.
-      You can 'look fountain' or 'pull chain'.
+      An iron chain hangs within reach over the well's edge.
     verbs:
       go:
         south:
@@ -217,22 +291,41 @@ rooms: # Map<String, Room>
         up:
           - room: bell-tower
       look:
+        "":
+          - ifState: spring
+            message: "The courtyard begins to thaw and water runs through the fountain. The repaired bell tower is up; the open gate is south."
+          - ifState: crank
+            message: "You have recovered the fountain's winding crank. Its wet chain hangs slack. Stone steps lead up to the bell tower; the open gate is south."
+          - ifState: gearInstalled
+            message: "A metallic click echoes down from the tower. The fountain chain hangs loose now, something brass glinting at its far end. Steps lead up; the gate is south."
+          - message: "A dry fountain stands beneath the bell tower. A chain descends into its well beside a rigid counterweight cable running up the tower wall. Stone steps lead up; the gate is south."
         fountain:
-          - message: "A winding crank hangs from a chain connected to the tower's counterweight. Fit the missing tower gear to release the chain, then 'pull chain'."
+          - ifState: spring
+            message: "Water flows again. You already recovered the crank and repaired the tower."
+          - ifState: crank
+            message: "You have already recovered the winding crank. Only the wet chain remains in the well."
+          - ifState: gearInstalled
+            message: "The counterweight has shifted. The chain is free now; a square-ended brass handle hangs from it just below the waterline."
+          - message: "A square-ended brass handle hangs from a chain caught behind the counterweight. Its cable runs into the tower above. There are no gears or sockets in the fountain itself."
+      use:
+        gear:
+          - ifState: gearInstalled
+            message: "The gear is already installed upstairs."
+          - message: "There is no place for a gear in the fountain. Only the counterweight cable connects it to the tower above."
       pull:
         chain:
           - ifState: crank
             message: "You already recovered the winding crank."
           - ifState: gearInstalled
             addState: crank
-            message: "You pull the chain hand over hand and recover the winding crank. Carry it up to the tower."
-          - message: "The chain is jammed by the tower's frozen counterweight. Fit the sun gear in the tower first."
+            message: "You pull the chain hand over hand and recover the winding crank. Its square end is polished by years of use."
+          - message: "The chain is jammed behind the counterweight. The taut cable shudders against the tower wall."
   bell-tower:
     name: Bell tower mechanism
     description: |
       A pendulum hangs motionless above a machine with a sun-shaped gap and an empty crank socket.
       A balcony overlooks a valley trapped in winter. The courtyard is down.
-      Try 'look mechanism', 'use gear', 'use crank', and finally 'ring bell'.
+      A bell rope hangs beside the machine.
     verbs:
       go:
         down:
@@ -242,25 +335,47 @@ rooms: # Map<String, Room>
             room: sunrise
           - message: "A wall of frozen mist blocks the eastern bridge. Restore the bell before crossing."
       look:
-        mechanism:
+        "":
+          - ifState: spring
+            message: "Time is moving again. The pendulum swings and the valley begins to thaw. The repaired mechanism is running. Go east across the sunrise bridge, or down to the courtyard."
           - ifState: mechanismReady
-            message: "The gear is fitted and the spring is wound. Ring the bell to restart time."
+            message: "The sun gear is installed and the spring is wound. A faint vibration reaches the bell rope beside you. The courtyard is down."
+          - ifState: crank
+            message: "The sun gear is installed. Beside it, an empty square socket matches the crank you recovered. The bell rope hangs slack. The courtyard is down."
           - ifState: gearInstalled
-            message: "The sun gear fits perfectly. Use the crank from the courtyard fountain to wind the spring."
-          - message: "The sun gear is missing. The keeper's journal in the archive explains where it is hidden."
+            message: "The sun gear is installed, but the crank socket is empty. The counterweight cable has slackened; it descends toward the fountain below. The courtyard is down."
+          - ifState: sunGear
+            message: "You are carrying the sun gear. Its teeth match the gap in the tower movement. A bell rope hangs beside the machine. The courtyard is down."
+          - message: "A pendulum hangs motionless above a machine with a sun-shaped gap and a square socket. A bell rope hangs nearby. The courtyard is down; frozen mist hides the eastern bridge."
+        mechanism:
+          - ifState: spring
+            message: "The repaired mechanism is running. Time is moving again. Go east to the sunrise."
+          - ifState: mechanismReady
+            message: "The gear is fitted and the spring is wound. The bell hammer is poised above its catch."
+          - ifState: crank
+            message: "The socket is square, like the end of your recovered crank. The gear is fitted, but the spring hangs slack."
+          - ifState: gearInstalled
+            message: "The gear is meshed with its neighbours. An empty square socket sits beside the slack spring; the counterweight cable now moves freely toward the fountain below."
+          - ifState: sunGear
+            message: "The sun gear in your coat matches the empty space between the remaining teeth."
+          - message: "A sun-shaped gear is missing from the movement. The keeper's initials are scratched beside the gap."
       use:
         gear:
           - ifState: gearInstalled
             message: "The sun gear is already fitted."
           - ifState: sunGear
             addState: gearInstalled
-            message: "You fit the sun gear. The teeth engage and release the fountain's counterweight below. Pull its chain to recover the crank, then bring it here and 'use crank'."
-          - message: "You need the sun gear from the archive chest. Read the keeper's journal there."
+            message: "You fit the sun gear. The teeth engage, and a heavy clunk sounds from the fountain's counterweight below. The winding socket remains empty."
+          - message: "You have no gear that fits the sun-shaped gap."
         crank:
+          - ifState: spring
+            message: "The mechanism is already running. You do not need to wind it again."
+          - ifState: mechanismReady
+            message: "The crank is already attached and the spring is wound."
           - ifState: crank
             addState: mechanismReady
-            message: "You attach the crank and wind the spring. The fitted sun gear begins to glow. Now 'ring bell'."
-          - message: "You need the winding crank. Look in the courtyard fountain below."
+            message: "You attach the crank and wind the spring. The fitted sun gear begins to glow. The bell rope twitches as the hammer rises."
+          - message: "You have no crank that fits the square socket."
       ring:
         bell:
           - ifState: spring
@@ -269,8 +384,8 @@ rooms: # Map<String, Room>
             addState: spring
             message: "The bell sounds across the valley. Snow begins to fall, then melts into rain. Time is moving again. A bridge appears east toward the sunrise."
           - ifState: gearInstalled
-            message: "The gear is fitted, but the spring is slack. Recover the crank from the courtyard fountain and 'use crank'."
-          - message: "The bell is silent. Find the sun gear in the archive and fit it with 'use gear'."
+            message: "The gear is fitted, but the spring is slack. The bell hammer drops without reaching the bronze."
+          - message: "The bell is silent. Its linkage ends at the gap where a gear should be."
   sunrise:
     name: Valley of the first sunrise
     description: |
@@ -294,7 +409,7 @@ globals:
         You can go to a possible direction typing <go (direction)>.
         You can examine the room or any object typing <examine (object)>. Look around with <look>.
         Type <help verbs> to get a list of possible verbs.
-    unknownObject: "Possible verbs include: go, take, examine, open,..."
+    unknownObject: "Possible verbs include: go, take, look, examine, open, pull, use, ring. Commands use a verb and an object, such as 'open door' or 'use tool'. Movement uses directions, such as 'go north'. Enter 'look' to reread your surroundings."
   go:
     synonyms: [ walk, drive, climb, move ]
     unknownVerb: You can't go there! # if the room does not know the verb 'go' at all

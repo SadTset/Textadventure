@@ -40,11 +40,25 @@ Follow the northern trail from the hidden room into a frozen valley and find
 out why time has stopped. The telescope clue opens the winter gate; a keeper's
 journal, a sealed chest, and a fountain lead to repairing the bell tower.
 Six new locations continue the existing story, with a distinct sunrise ending.
-All puzzles use the original YAML format; no engine changes are required.
+All puzzles use the original YAML format.
 
 Read room descriptions for directions and commands. Movement uses directions
 (`go north`, `go up`), not room names. New interactions include `pull chain`,
 `use gear`, `use crank`, and `ring bell`; their clues appear in the story.
+
+Enter `look` (or `examine`) at any time to reread the current surroundings.
+Arrival text and object descriptions reflect collected items, opened doors,
+repair stages and the thaw after the ending. Completed actions are not reset
+when you leave a room. Progress lasts for the current session, not across restarts.
+
+Room text describes visible objects and changes rather than prescribing the
+next move. Examine objects to discover clues; `help verbs` explains command
+syntax without revealing puzzle solutions. The full solution below is optional.
+
+For story authors: conditional room text uses the existing `look` verb with an
+empty object key (`""`) and ordered `ifState`/`message` actions. Arrival and bare
+`look` select the first matching message without executing its state or movement
+effects. Without a matching message, the engine uses the normal `description`.
 
 <details>
 <summary>Full walkthrough (spoilers)</summary>

@@ -92,6 +92,26 @@ work. The clean build passed again before committing.
 | Questions about the wardrobe, lantern, telescope and Narnia ending | Explained the key requirement, directional commands and short tutorial ending. Verified the lantern route with its focused test. |
 | “could you make more? like right now it's very underwhelming” | Expanded the tutorial into The Clockmaker's Winter, continuing beyond Narnia with six locations, a telescope-dependent gate, an archive chest and a bell-tower restoration puzzle. Added regression playthroughs, preserving the original puzzle and YAML format. Updated the README with player guidance and a spoiler walkthrough. |
 
+The user then requested a commit of the expansion; it was committed as
+`b8be018` without pushing.
+
+The user reported misleading fountain instructions and stale descriptions after
+taking the coat or opening the gate, and requested consistency throughout the
+game. Reproduced eight regression scenarios before fixing them. Added generic
+state-aware arrival/room inspection through the existing YAML action format,
+updated item, gate, chest, repair and post-ending descriptions, and made the
+gear's exact location and commands explicit. Repeated actions now acknowledge
+completed progress. Updated automated coverage and exercised a console route
+with revisits and the new ending, plus room inspection in the forest story.
+
+The user clarified that better guidance must not mean giving away solutions.
+Replaced the over-explicit command sequences with environmental clues: matching
+shapes, the cable linking fountain and tower, a heat-sensitive seal and the
+keeper's incomplete notes. Kept state-aware descriptions and repeat-action
+checks. Generic syntax help remains separate from puzzle clues; the optional
+spoiler walkthrough stays in the README. Added a regression check against
+walkthrough commands embedded in story messages.
+
 ## Continue this log
 
 After each meaningful AI assisted work session, add the date, a short summary of the prompt(s), and what changed or was learned. Include learning, debugging, review, and implementation prompts. Keep the summary accurate; do not invent prompts or claim work that has not been completed.

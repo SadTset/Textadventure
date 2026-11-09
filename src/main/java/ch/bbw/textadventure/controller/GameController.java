@@ -27,7 +27,12 @@ public final class GameController {
 
     public String currentRoomText() {
         var room = story.rooms().get(state.currentRoomId());
-        return room.name() + System.lineSeparator() + room.description();
+        var look = room.verbs().get("look");
+        var descriptions = look == null ? null : look.get("");
+        var description = descriptions == null ? null : firstMatchingAction(descriptions);
+        var text = description == null || description.message() == null
+                ? room.description() : description.message();
+        return room.name() + System.lineSeparator() + text;
     }
 
     public String handleCommand(String input) {
@@ -45,6 +50,9 @@ public final class GameController {
     }
 
     private String handleStoryCommand(String verb, String object) {
+        if ("look".equals(verb) && object.isEmpty()) {
+            return currentRoomText();
+        }
         var room = story.rooms().get(state.currentRoomId());
         if ("help".equals(verb) && !room.verbs().containsKey(verb)) {
             return object.isEmpty() ? unknownVerb(verb) : unknownObject(verb, object);

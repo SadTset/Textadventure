@@ -86,6 +86,13 @@ scripted console runs reached the new ending and verified the forest story.
 The README includes a spoiler walkthrough. Rerun IDE Sonar analysis for the
 new tests before submission; the previous clean report predates this expansion.
 
+Player feedback exposed stale descriptions despite correctly stored states.
+State-aware arrival text and bare `look` now use existing conditional YAML
+messages. Collected items, opened gates, repaired mechanisms and the thaw are
+reflected on revisits, with explicit commands for the fountain/tower sequence.
+Regression tests cover these stages and repeated actions; rerun IDE Sonar on
+the controller and new tests before submission.
+
 ## [ ] 9. Review code and prepare for the written check
 
 Run `.\gradlew.bat clean build --warning-mode all`, play the game, and run SonarLint in the IDE. Fix warnings, especially long methods. Keep code in English, use `var` wherever possible, and deliberately use and understand Java 25's newer language features. Prefer Jackson as the only runtime library and check that dependencies are current.

@@ -22,8 +22,9 @@ class StoryLoaderTest {
             assertTrue(story.description().startsWith("Welcome to the tutorial!"));
             assertEquals("Starting room", story.rooms().get("room-one").name());
             assertEquals("key", story.rooms().get("room-one").verbs().get("take").get("key").getFirst().ifState());
-            assertEquals("wardrobeOpen", story.rooms().get("room-two").verbs().get("open")
-                    .get("wardrobe").getFirst().addState());
+            assertTrue(story.rooms().get("room-two").verbs().get("open").get("wardrobe").stream()
+                    .anyMatch(action -> "key".equals(action.ifState())
+                            && "wardrobeOpen".equals(action.addState())));
             assertTrue(story.globals().get("go").synonyms().contains("walk"));
             assertEquals("You can't go {} from here!", story.globals().get("go").unknownObject());
         }

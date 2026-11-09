@@ -38,7 +38,7 @@ class GameControllerTest {
                 controller.handleCommand(command);
             }
             assertTrue(controller.handleCommand("take gear").contains("sealed chest"));
-            assertTrue(controller.handleCommand("open chest").contains("journal"));
+            assertTrue(controller.handleCommand("open chest").contains("handwriting"));
             controller.handleCommand("look journal");
             controller.handleCommand("open chest");
             controller.handleCommand("take gear");
@@ -46,7 +46,7 @@ class GameControllerTest {
             for (var command : new String[] {"go east", "go east", "go north", "go up", "use gear"}) {
                 controller.handleCommand(command);
             }
-            assertTrue(controller.handleCommand("ring bell").contains("crank"));
+            assertTrue(controller.handleCommand("ring bell").contains("spring is slack"));
             assertFalse(state.hasState("spring"));
             controller.handleCommand("go down");
             controller.handleCommand("pull chain");
@@ -69,7 +69,7 @@ class GameControllerTest {
 
             enterNarnia(controller);
             assertTrue(controller.currentRoomText().contains("north"));
-            assertTrue(controller.handleCommand("go north").contains("lantern"));
+            assertTrue(controller.handleCommand("go north").contains("cannot see"));
             assertEquals("secret", state.currentRoomId());
             controller.handleCommand("go west");
             controller.handleCommand("go west");
@@ -80,7 +80,7 @@ class GameControllerTest {
             controller.handleCommand("go east");
             assertTrue(controller.handleCommand("go north").contains("Frozen wood"));
             controller.handleCommand("go east");
-            assertTrue(controller.handleCommand("open gate").contains("telescope"));
+            assertTrue(controller.handleCommand("open gate").contains("watcher"));
             controller.handleCommand("go north");
             assertEquals("iron-gate", state.currentRoomId());
 
@@ -181,7 +181,7 @@ class GameControllerTest {
             var controller = new GameController(story, state);
 
             assertTrue(controller.handleCommand("  go   east  ").contains("Another room"));
-            assertTrue(controller.handleCommand("open wardrobe").contains("try to pick up the wardrobe"));
+            assertTrue(controller.handleCommand("open wardrobe").contains("locked"));
             assertFalse(state.hasState("wardrobeOpen"));
             assertEquals("You can't go east from here!", controller.handleCommand("go east"));
             assertTrue(controller.handleCommand("go west").contains("Starting room"));
@@ -224,8 +224,7 @@ class GameControllerTest {
             assertEquals("You cannot do that.", controller.handleCommand("dance"));
             assertTrue(controller.handleCommand("help").contains("typing something like <verb object>"));
             assertEquals(controller.handleCommand("help"), controller.handleCommand("wtf"));
-            assertEquals("Possible verbs include: go, take, examine, open,...",
-                    controller.handleCommand("help verbs"));
+            assertTrue(controller.handleCommand("help verbs").contains("pull, use, ring"));
             assertTrue(controller.handleCommand("walk east").contains("Another room"));
         }
     }
