@@ -347,6 +347,18 @@ rooms: # Map<String, Room>
           - ifState: sunGear
             message: "You are carrying the sun gear. Its teeth match the gap in the tower movement. A bell rope hangs beside the machine. The courtyard is down."
           - message: "A pendulum hangs motionless above a machine with a sun-shaped gap and a square socket. A bell rope hangs nearby. The courtyard is down; frozen mist hides the eastern bridge."
+        rope:
+          - ifState: spring
+            message: "The bell rope sways with each clear note. Beyond the balcony, the eastern bridge is clear."
+          - message: "The braided rope runs over a pulley to the bell hammer's release catch. Its lower end is within reach."
+        hammer:
+          - ifState: spring
+            message: "The hammer moves freely against the bell."
+          - message: "The hammer sits behind the movement, connected to the rope's release catch."
+        bell:
+          - ifState: spring
+            message: "The bell is ringing. Sunlight falls across the bridge to the east."
+          - message: "A bronze bell hangs above the mechanism. Its hammer is linked to the rope beside you."
         mechanism:
           - ifState: spring
             message: "The repaired mechanism is running. Time is moving again. Go east to the sunrise."
@@ -376,7 +388,28 @@ rooms: # Map<String, Room>
             addState: mechanismReady
             message: "You attach the crank and wind the spring. The fitted sun gear begins to glow. The bell rope twitches as the hammer rises."
           - message: "You have no crank that fits the square socket."
+      pull:
+        rope:
+          - ifState: spring
+            message: "The bell rings freely. The eastern bridge leads to the sunrise."
+          - ifState: mechanismReady
+            addState: spring
+            message: "The bell sounds across the valley. Snow begins to fall, then melts into rain. Time is moving again. A bridge appears east toward the sunrise."
+          - ifState: gearInstalled
+            message: "The gear is fitted, but the spring is slack. The bell hammer drops without reaching the bronze."
+          - message: "The bell is silent. Its linkage ends at the gap where a gear should be."
+        hammer:
+          - message: "The hammer is enclosed behind the movement. You cannot pull it by hand; the bell rope is connected to its release."
       ring:
+        rope:
+          - ifState: spring
+            message: "The bell rings freely. The eastern bridge leads to the sunrise."
+          - ifState: mechanismReady
+            addState: spring
+            message: "The bell sounds across the valley. Snow begins to fall, then melts into rain. Time is moving again. A bridge appears east toward the sunrise."
+          - ifState: gearInstalled
+            message: "The gear is fitted, but the spring is slack. The bell hammer drops without reaching the bronze."
+          - message: "The bell is silent. Its linkage ends at the gap where a gear should be."
         bell:
           - ifState: spring
             message: "The bell rings freely. The eastern bridge leads to the sunrise."
@@ -426,3 +459,12 @@ globals:
     synonyms: [ unlock ]
     unknownVerb: Nothing to open here!
     unknownObject: You cannot open {}!
+  pull:
+    unknownVerb: "There is nothing here you can pull."
+    unknownObject: "You cannot pull {} here."
+  ring:
+    unknownVerb: "There is nothing here you can ring."
+    unknownObject: "You cannot ring {} here."
+  use:
+    unknownVerb: "There is nothing here you can use that way."
+    unknownObject: "You cannot use {} here."

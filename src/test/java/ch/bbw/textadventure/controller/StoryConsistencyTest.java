@@ -158,6 +158,22 @@ class StoryConsistencyTest {
     }
 
     @Test
+    void visibleBellControlsWorkAndBadCommandsDoNotBreakProgress() {
+        state.moveTo("bell-tower");
+        assertTrue(controller.handleCommand("ring rope").contains("gear"));
+        assertFalse(state.hasState("spring"));
+        assertTrue(controller.handleCommand("pull hammer").contains("hammer"));
+        assertTrue(controller.handleCommand("ring banana").contains("banana"));
+        assertEquals("bell-tower", state.currentRoomId());
+        state.addState("mechanismReady");
+        assertTrue(controller.handleCommand("look rope").contains("bell"));
+        assertTrue(controller.handleCommand("pull rope").contains("Time is moving again"));
+        assertTrue(controller.currentRoomText().contains("east"));
+        assertTrue(controller.handleCommand("ring rope").contains("rings freely"));
+        assertTrue(controller.handleCommand("go east").contains("THE END"));
+    }
+
+    @Test
     void roomInspectionDoesNotChangePuzzleState() {
         var before = state.states();
         var room = state.currentRoomId();

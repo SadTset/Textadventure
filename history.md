@@ -112,6 +112,14 @@ checks. Generic syntax help remains separate from puzzle clues; the optional
 spoiler walkthrough stays in the README. Added a regression check against
 walkthrough commands embedded in story messages.
 
+The user reported that natural attempts such as ringing the rope or pulling
+the hammer failed unhelpfully, and asked how to finish after repairing the tower.
+Added rope inspection and both rope interactions alongside the existing bell
+command, physical feedback for the inaccessible hammer, and explicit error
+responses for unsupported pull/ring/use objects. Verified a console route using
+invalid commands followed by ringing the rope and reaching the ending; all 29
+tests passed. These changes have not yet been committed.
+
 ## Continue this log
 
 After each meaningful AI assisted work session, add the date, a short summary of the prompt(s), and what changed or was learned. Include learning, debugging, review, and implementation prompts. Keep the summary accurate; do not invent prompts or claim work that has not been completed.
