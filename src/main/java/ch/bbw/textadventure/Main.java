@@ -12,7 +12,7 @@ public final class Main {
     private Main() {
     }
 
-    public static void main(String[] args) throws IOException {
+    static void main(String[] args) throws IOException {
         var story = loadStory(args);
         var state = new GameState(story.startRoom());
         var controller = new GameController(story, state);
