@@ -120,6 +120,11 @@ responses for unsupported pull/ring/use objects. Verified a console route using
 invalid commands followed by ringing the rope and reaching the ending; all 29
 tests passed. These changes have not yet been committed.
 
+The user requested updating Jackson after the final submission review found a
+newer Maven Central release. Updated the version catalog from 2.22.4 to 2.23.0;
+the clean build passed, and Gradle dependency insight confirmed YAML, core and
+databind resolve to 2.23.0. No commit was made for this update.
+
 ## Continue this log
 
 After each meaningful AI assisted work session, add the date, a short summary of the prompt(s), and what changed or was learned. Include learning, debugging, review, and implementation prompts. Keep the summary accurate; do not invent prompts or claim work that has not been completed.
